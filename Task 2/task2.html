@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Facebook Home Page</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Bootstrap 5 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --blue: #0866ff;
+            --bg: #f0f2f5;
+            --text: #050505;
+            --secondary: #65676b;
+            --hover: #e4e6eb;
+            --white: #ffffff;
+            --border: #ced0d4;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            width: 100%;
+            height: 56px;
+            background: white;
+
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            z-index: 1000;
+
+            padding: 0 16px;
+
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+        }
+
+        .nav-left {
+            gap: 8px;
+            width: 320px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+
+            background: var(--blue);
+            color: white;
+
+            border-radius: 50%;
+
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+
+            font-size: 38px;
+            font-weight: bold;
+            line-height: 36px;
+        }
+
+        .search {
+            height: 40px;
+            flex: 1;
+
+            gap: 8px;
+
+            padding: 0 14px;
+
+            border-radius: 25px;
+
+            background: var(--bg);
+            color: var(--secondary);
+        }
+
+        .search input {
+            width: 100%;
+
+            border: none;
+            outline: none;
+
+            background: transparent;
+
+            font-size: 15px;
+        }
+
+        .nav-center {
+            position: absolute;
+
+            left: 50%;
+            transform: translateX(-50%);
+
+            height: 100%;
+
+            gap: 7px;
+        }
+
+        .nav-center a {
+            width: 110px;
+            height: 52px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 8px;
+
+            color: #65676b;
+
+            font-size: 21px;
+
+            position: relative;
+        }
+
+        .nav-center a:hover {
+            background: #f2f2f2;
+        }
+
+        .nav-center a.active {
+            color: var(--blue);
+        }
+
+        .nav-center a.active::after {
+            content: "";
+
+            position: absolute;
+
+            height: 3px;
+
+            left: 0;
+            right: 0;
+            bottom: -2px;
+
+            background: var(--blue);
+        }
+
+        .nav-right {
+            width: 320px;
+            gap: 8px;
+        }
+
+        .circle-btn {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50%;
+
+            background: var(--hover);
+
+            font-size: 18px;
+
+            position: relative;
+        }
+
+        .circle-btn:hover {
+            background: #d8dadf;
+        }
+
+        .notification {
+            position: absolute;
+
+            top: -5px;
+            right: -5px;
+
+            background: #e41e3f;
+            color: white;
+
+            min-width: 19px;
+            height: 19px;
+
+            border: 2px solid white;
+            border-radius: 20px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .profile {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            cursor: pointer;
+        }
+
+        /* =========================
+           PAGE
+        ========================= */
+
+        .layout {
+            --bs-gutter-x: 0;
+
+            padding-top: 72px;
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(250px, 360px)
+                minmax(500px, 680px)
+                minmax(250px, 360px);
+
+            gap: 30px;
+
+            justify-content: space-between;
+        }
+
+        /* =========================
+           LEFT SIDEBAR
+        ========================= */
+
+        .left-sidebar {
+            height: calc(100vh - 70px);
+
+            position: sticky;
+            top: 70px;
+
+            overflow-y: auto;
+
+            padding: 5px 8px 30px 16px;
+        }
+
+        .sidebar-item {
+            height: 52px;
+
+            gap: 12px;
+
+            padding: 0 8px;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .sidebar-item:hover {
+            background: #e4e6e9;
+        }
+
+        .sidebar-item img {
+            width: 36px;
+            height: 36px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+        }
+
+        .side-icon {
+            width: 36px;
+            height: 36px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 21px;
+        }
+
+        .blue {
+            color: #1877f2;
+        }
+
+        .purple {
+            color: #a033ff;
+        }
+
+        .cyan {
+            color: #00a5f0;
+        }
+
+        .red {
+            color: #f5533d;
+        }
+
+        .pink {
+            color: #f02849;
+        }
+
+        .more-icon {
+            width: 36px;
+            height: 36px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 50%;
+
+            background: #e4e6eb;
+        }
+
+        .line {
+            height: 1px;
+
+            background: #ced0d4;
+
+            margin: 10px 8px;
+        }
+
+        .section-heading {
+            color: var(--secondary);
+
+            font-size: 17px;
+            font-weight: bold;
+
+            padding: 8px;
+        }
+
+        .shortcut {
+            width: 36px;
+            height: 36px;
+
+            border-radius: 8px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            color: white;
+        }
+
+        .shortcut.code {
+            background: #111827;
+        }
+
+        .shortcut.game {
+            background: #7c3aed;
+        }
+
+        .shortcut.uni {
+            background: #2563eb;
+        }
+
+        .footer {
+            color: var(--secondary);
+
+            font-size: 12px;
+            line-height: 1.5;
+
+            padding: 15px 8px;
+        }
+
+        /* =========================
+           FEED
+        ========================= */
+
+        .feed {
+            width: 100%;
+            max-width: 680px;
+
+            padding-bottom: 40px;
+        }
+
+        /* STORIES */
+
+        .stories {
+            gap: 8px;
+
+            height: 205px;
+
+            overflow: hidden;
+
+            margin-bottom: 16px;
+        }
+
+        .story {
+            flex: 1;
+
+            min-width: 110px;
+            height: 200px;
+
+            position: relative;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+            background-size: cover;
+            background-position: center;
+
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .story:hover {
+            transform: scale(1.02);
+        }
+
+        .story-avatar {
+            width: 40px;
+            height: 40px;
+
+            position: absolute;
+
+            top: 12px;
+            left: 12px;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+            border: 4px solid var(--blue);
+        }
+
+        .story-name {
+            position: absolute;
+
+            bottom: 12px;
+            left: 12px;
+            right: 8px;
+
+            color: white;
+
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .create-story {
+            background: white;
+        }
+
+        .create-story > img {
+            width: 100%;
+            height: 145px;
+
+            object-fit: cover;
+        }
+
+        .create-bottom {
+            height: 55px;
+
+            position: relative;
+
+            padding-bottom: 10px;
+
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .plus {
+            position: absolute;
+
+            top: -20px;
+
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50%;
+
+            background: var(--blue);
+            color: white;
+
+            border: 4px solid white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* =========================
+           CARDS / POSTS
+        ========================= */
+
+        .card {
+            background: white;
+
+            border: none;
+
+            border-radius: 9px;
+
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
+
+            margin-bottom: 16px;
+        }
+
+        .create-post {
+            padding: 12px 16px;
+        }
+
+        .create-input {
+            gap: 8px;
+        }
+
+        .create-input img {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+        }
+
+        .fake-input {
+            flex: 1;
+
+            height: 40px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 15px;
+
+            border-radius: 25px;
+
+            background: var(--bg);
+            color: var(--secondary);
+
+            font-size: 17px;
+
+            cursor: pointer;
+        }
+
+        .fake-input:hover {
+            background: #e4e6e9;
+        }
+
+        .divider {
+            height: 1px;
+
+            background: #e4e6eb;
+
+            margin: 12px 0 8px;
+        }
+
+        .create-actions button {
+            flex: 1;
+
+            height: 40px;
+
+            border-radius: 7px;
+
+            background: white;
+            color: var(--secondary);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            gap: 8px;
+
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .create-actions button:hover {
+            background: #f2f2f2;
+        }
+
+        .create-actions i {
+            font-size: 22px;
+        }
+
+        .live {
+            color: #f02849;
+        }
+
+        .photo {
+            color: #45bd62;
+        }
+
+        .feeling {
+            color: #f7b928;
+        }
+
+        .post {
+            overflow: hidden;
+        }
+
+        .post-header {
+            padding: 12px 16px 5px;
+        }
+
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            margin-right: 10px;
+        }
+
+        .post-user {
+            flex: 1;
+
+            font-size: 14px;
+        }
+
+        .post-user strong:hover {
+            text-decoration: underline;
+
+            cursor: pointer;
+        }
+
+        .post-time {
+            margin-top: 4px;
+
+            color: var(--secondary);
+
+            font-size: 12px;
+        }
+
+        .post-menu {
+            width: 36px;
+            height: 36px;
+
+            border-radius: 50%;
+
+            background: transparent;
+
+            font-size: 18px;
+
+            color: var(--secondary);
+        }
+
+        .post-menu:hover {
+            background: var(--bg);
+        }
+
+        .post-text {
+            padding: 8px 16px 12px;
+
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .post-image {
+            width: 100%;
+
+            display: block;
+
+            max-height: 600px;
+
+            object-fit: cover;
+        }
+
+        .programming-post {
+            height: 350px;
+
+            background:
+                radial-gradient(circle at top right, #2563eb, transparent 35%),
+                linear-gradient(135deg, #111827, #172554);
+
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+        }
+
+        .programming-post i {
+            font-size: 65px;
+
+            color: #60a5fa;
+
+            margin-bottom: 20px;
+        }
+
+        .programming-post h2 {
+            font-size: 32px;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 10px;
+        }
+
+        .programming-post p {
+            color: #bfdbfe;
+        }
+
+        .post-stats {
+            height: 44px;
+
+            margin: 0 16px;
+
+            color: var(--secondary);
+
+            font-size: 14px;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .reaction {
+            width: 20px;
+            height: 20px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 50%;
+
+            color: white;
+
+            border: 2px solid white;
+
+            font-size: 10px;
+        }
+
+        .like-reaction {
+            background: var(--blue);
+
+            z-index: 2;
+        }
+
+        .love-reaction {
+            background: #f55368;
+
+            margin-left: -4px;
+        }
+
+        .reaction-number {
+            margin-left: 5px;
+        }
+
+        .post-buttons {
+            height: 44px;
+
+            margin: 0 16px;
+        }
+
+        .post-buttons button {
+            flex: 1;
+
+            height: 36px;
+
+            border-radius: 5px;
+
+            background: white;
+            color: var(--secondary);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            gap: 8px;
+
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .post-buttons button:hover {
+            background: #f2f2f2;
+        }
+
+        .post-buttons i {
+            font-size: 18px;
+        }
+
+        /* =========================
+           RIGHT SIDEBAR
+        ========================= */
+
+        .right-sidebar {
+            height: calc(100vh - 70px);
+
+            position: sticky;
+
+            top: 70px;
+
+            overflow-y: auto;
+
+            padding: 5px 16px 30px 0;
+        }
+
+        .sponsored {
+            gap: 12px;
+
+            padding: 8px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+        }
+
+        .sponsored:hover {
+            background: #e4e6e9;
+        }
+
+        .ad {
+            width: 110px;
+            height: 85px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 8px;
+
+            color: white;
+
+            font-size: 35px;
+        }
+
+        .ad1 {
+            background: linear-gradient(135deg, #111827, #2563eb);
+        }
+
+        .ad2 {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+        }
+
+        .sponsored strong {
+            display: block;
+
+            margin-bottom: 6px;
+
+            font-size: 14px;
+        }
+
+        .sponsored span {
+            color: var(--secondary);
+
+            font-size: 12px;
+        }
+
+        .birthday {
+            padding: 8px;
+
+            gap: 12px;
+        }
+
+        .birthday i {
+            color: var(--blue);
+
+            font-size: 28px;
+        }
+
+        .birthday p {
+            font-size: 14px;
+            line-height: 1.4;
+
+            margin: 0;
+        }
+
+        .contacts-heading {
+            padding: 8px;
+        }
+
+        .contacts-heading h3 {
+            color: var(--secondary);
+
+            font-size: 17px;
+
+            margin: 0;
+        }
+
+        .contacts-heading button {
+            width: 32px;
+            height: 32px;
+
+            border-radius: 50%;
+
+            background: transparent;
+
+            color: var(--secondary);
+        }
+
+        .contacts-heading button:hover {
+            background: #e4e6e9;
+        }
+
+        .contact {
+            height: 52px;
+
+            gap: 12px;
+
+            padding: 0 8px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+        }
+
+        .contact:hover {
+            background: #e4e6e9;
+        }
+
+        .contact-image {
+            width: 36px;
+            height: 36px;
+
+            position: relative;
+        }
+
+        .contact-image img {
+            width: 36px;
+            height: 36px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+        }
+
+        .online {
+            width: 11px;
+            height: 11px;
+
+            position: absolute;
+
+            right: -1px;
+            bottom: -1px;
+
+            border-radius: 50%;
+
+            background: #31a24c;
+
+            border: 2px solid var(--bg);
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media(max-width: 1150px) {
+
+            .left-sidebar {
+                display: none;
+            }
+
+            .layout {
+                grid-template-columns:
+                    minmax(500px, 680px)
+                    300px;
+
+                justify-content: center;
+            }
+
+            .nav-left,
+            .nav-right {
+                width: 230px;
+            }
+
+            .search {
+                width: 40px;
+                flex: none;
+            }
+
+            .search input {
+                display: none;
+            }
+
+            .nav-center a {
+                width: 90px;
+            }
+        }
+
+        @media(max-width: 850px) {
+
+            .right-sidebar {
+                display: none;
+            }
+
+            .layout {
+                display: block;
+
+                max-width: 680px;
+
+                margin: auto;
+
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .nav-center a {
+                width: 75px;
+            }
+
+            .nav-center a:nth-child(4),
+            .nav-center a:nth-child(5) {
+                display: none;
+            }
+        }
+
+        @media(max-width: 600px) {
+
+            .nav-center {
+                display: none !important;
+            }
+
+            .nav-left,
+            .nav-right {
+                width: auto;
+            }
+
+            .layout {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .stories {
+                overflow-x: auto;
+
+                padding: 0 8px;
+            }
+
+            .story {
+                min-width: 110px;
+            }
+
+            .card {
+                border-radius: 0;
+            }
+
+            .create-actions span {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <header class="navbar d-flex align-items-center justify-content-between flex-nowrap">
+
+        <div class="nav-left d-flex align-items-center">
+
+            <div class="logo">
+                f
+            </div>
+
+            <div class="search d-flex align-items-center">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input type="text"
+                    placeholder="Search Facebook">
+
+            </div>
+
+        </div>
+
+
+        <nav class="nav-center d-flex align-items-center">
+
+            <a href="#" class="active">
+                <i class="fa-solid fa-house"></i>
+            </a>
+
+            <a href="#">
+                <i class="fa-solid fa-tv"></i>
+            </a>
+
+            <a href="#">
+                <i class="fa-solid fa-store"></i>
+            </a>
+
+            <a href="#">
+                <i class="fa-solid fa-user-group"></i>
+            </a>
+
+            <a href="#">
+                <i class="fa-solid fa-gamepad"></i>
+            </a>
+
+        </nav>
+
+
+        <div class="nav-right d-flex align-items-center justify-content-end">
+
+            <button class="circle-btn">
+                <i class="fa-solid fa-grip"></i>
+            </button>
+
+            <button class="circle-btn">
+                <i class="fa-brands fa-facebook-messenger"></i>
+            </button>
+
+            <button class="circle-btn">
+
+                <i class="fa-solid fa-bell"></i>
+
+                <span class="notification">
+                    3
+                </span>
+
+            </button>
+
+            <!-- YOUR PROFILE PICTURE -->
+
+            <img
+                class="profile"
+                src="IMG_1.jpg"
+                alt="Profile">
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         PAGE
+    ========================== -->
+
+    <main class="layout container-fluid">
+
+
+        <!-- =========================
+             LEFT SIDEBAR
+        ========================== -->
+
+        <aside class="left-sidebar">
+
+            <a href="#"
+                class="sidebar-item d-flex align-items-center">
+
+                <img src="IMG_1.jpg">
+
+                <span>
+                    Abdul Moeed Raza
+                </span>
+
+            </a>
+
+
+            <a href="#"
+                class="sidebar-item d-flex align-items-center">
+
+                <div class="side-icon blue">
+                    <i class="fa-solid fa-user-group"></i>
+                </div>
+
+                Friends
+
+            </a>
+
+
+            <a href="#"
+                class="sidebar-item d-flex align-items-center">
+
+                <div class="side-icon purple">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+
+                Memories
+
+            </a>
+
+
+            <a href="#"
+                class="sidebar-item d-flex align-items-center">
+
+                <div class="side-icon blue">
+                    <i class="fa-solid fa-bookmark"></i>
+                </div>
+
+                Saved
+
+            </a>
+
+
+            <a href="#"
+                class="sidebar-item d-flex align-items-center">
+
+                <div class="side-icon cyan">
+                    <i class="fa-solid fa-people-group"></i>
+                </div>
+
+                Groups
+
+            </a>
+
+
+            <a href="#"
+                class="sidebar-item d-flex align-items-center">
+
+                <div class="side-icon blue">
+                    <i class="fa-solid fa-tv"></i>
+                </div>
+
+                Video
+
+            </a>
+
+
+            <a href="#"
+                class="sidebar-item d-flex align-items-center">
+
+                <div class="side-icon cyan">
+                    <i class="fa-solid fa-store"></i>
+                </div>
+
+                Marketplace
+
+            </a>
+
+
+            <a href="#"
+                class="sidebar-item d-flex align-items-center">
+
+                <div class="side-icon red">
+                    <i class="fa-solid fa-calendar-days"></i>
+                </div>
+
+                Events
+
+            </a>
+
+
+            <a href="#"
+                class="sidebar-item d-flex align-items-center">
+
+                <div class="side-icon pink">
+                    <i class="fa-solid fa-chart-simple"></i>
+                </div>
+
+                Ads Manager
+
+            </a>
+
+
+            <a href="#"
+                class="sidebar-item d-flex align-items-center">
+
+                <div class="more-icon">
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+
+                See more
+
+            </a>
+
+
+            <div class="line"></div>
+
+
+            <div class="section-heading">
+                Your shortcuts
+            </div>
+
+
+            <a href="#"
+                class="sidebar-item d-flex align-items-center">
+
+                <div class="shortcut game">
+                    <i class="fa-solid fa-gamepad"></i>
+                </div>
+
+                Gaming Community
+
+            </a>
+
+
+            <a href="#"
+                class="sidebar-item d-flex align-items-center">
+
+                <div class="shortcut code">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+
+                Web Developers
+
+            </a>
+
+
+            <a href="#"
+                class="sidebar-item d-flex align-items-center">
+
+                <div class="shortcut uni">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+
+                Air University
+
+            </a>
+
+
+            <div class="footer">
+
+                Privacy · Terms · Advertising · Ad Choices ·
+                Cookies · More · Meta © 2026
+
+            </div>
+
+        </aside>
+
+
+        <!-- =========================
+             CENTER FEED
+        ========================== -->
+
+        <section class="feed">
+
+
+            <!-- STORIES -->
+
+            <div class="stories d-flex">
+
+
+                <!-- CREATE STORY -->
+
+                <div class="story create-story">
+
+                    <img src="IMG_1.jpg">
+
+                    <div
+                        class="create-bottom d-flex align-items-end justify-content-center">
+
+                        <div class="plus">
+
+                            <i class="fa-solid fa-plus"></i>
+
+                        </div>
+
+                        Create story
+
+                    </div>
+
+                </div>
+
+
+                <!-- STORY 1 -->
+
+                <div
+                    class="story"
+                    style="
+                    background-image:
+                    linear-gradient(
+                        transparent,
+                        rgba(0,0,0,.7)
+                    ),
+                    url('https://picsum.photos/300/500?random=21');
+                    ">
+
+                    <img
+                        class="story-avatar"
+                        src="https://i.pravatar.cc/80?img=5">
+
+                    <span class="story-name">
+                        Alexa
+                    </span>
+
+                </div>
+
+
+                <!-- STORY 2 -->
+
+                <div
+                    class="story"
+                    style="
+                    background-image:
+                    linear-gradient(
+                        transparent,
+                        rgba(0,0,0,.7)
+                    ),
+                    url('PeterParkerStory.webp');
+                    ">
+
+                    <img
+                        class="story-avatar"
+                        src="Peterparker.webp">
+
+                    <span class="story-name">
+                        Peter Parker
+                    </span>
+
+                </div>
+
+
+                <!-- STORY 3 -->
+
+                <div
+                    class="story"
+                    style="
+                    background-image:
+                    linear-gradient(
+                        transparent,
+                        rgba(0,0,0,.7)
+                    ),
+                    url('https://picsum.photos/300/500?random=23');
+                    ">
+
+                    <img
+                        class="story-avatar"
+                        src="https://i.pravatar.cc/80?img=15">
+
+                    <span class="story-name">
+                        Alex Morgan
+                    </span>
+
+                </div>
+
+
+                <!-- STORY 4 -->
+
+                <div
+                    class="story"
+                    style="
+                    background-image:
+                    linear-gradient(
+                        transparent,
+                        rgba(0,0,0,.7)
+                    ),
+                    url('https://picsum.photos/300/500?random=24');
+                    ">
+
+                    <img
+                        class="story-avatar"
+                        src="https://i.pravatar.cc/80?img=14">
+
+                    <span class="story-name">
+                        Rayyan
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 CREATE POST
+            ========================== -->
+
+            <div class="card create-post">
+
+                <div class="create-input d-flex align-items-center">
+
+                    <img src="IMG_1.jpg">
+
+                    <div class="fake-input">
+
+                        What's on your mind, Moeed?
+
+                    </div>
+
+                </div>
+
+
+                <div class="divider"></div>
+
+
+                <div class="create-actions d-flex">
+
+                    <button>
+
+                        <i class="fa-solid fa-video live"></i>
+
+                        <span>
+                            Live video
+                        </span>
+
+                    </button>
+
+
+                    <button>
+
+                        <i class="fa-solid fa-images photo"></i>
+
+                        <span>
+                            Photo/video
+                        </span>
+
+                    </button>
+
+
+                    <button>
+
+                        <i class="fa-solid fa-face-smile feeling"></i>
+
+                        <span>
+                            Feeling/activity
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 POST 1
+            ========================== -->
+
+            <article class="card post">
+
+                <div class="post-header d-flex align-items-center">
+
+                    <img
+                        class="post-avatar"
+                        src="IMG_1.jpg">
+
+                    <div class="post-user">
+
+                        <strong>
+                            Moeed Raza
+                        </strong>
+
+                        <div class="post-time">
+
+                            2h ·
+
+                            <i class="fa-solid fa-earth-americas"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <button class="post-menu">
+
+                        <i class="fa-solid fa-ellipsis"></i>
+
+                    </button>
+
+                </div>
+
+
+                <div class="post-text">
+                    ✌
+                </div>
+
+
+                <img
+                    class="post-image img-fluid"
+                    src="IMG_2.jpeg"
+                    alt="Post image">
+
+
+                <div
+                    class="post-stats d-flex align-items-center justify-content-between">
+
+                    <div class="reaction-box d-flex align-items-center">
+
+                        <span class="reaction like-reaction">
+
+                            <i class="fa-solid fa-thumbs-up"></i>
+
+                        </span>
+
+                        <span class="reaction love-reaction">
+
+                            <i class="fa-solid fa-heart"></i>
+
+                        </span>
+
+                        <span class="reaction-number">
+                            1.2K
+                        </span>
+
+                    </div>
+
+
+                    <span>
+                        86 comments · 21 shares
+                    </span>
+
+                </div>
+
+
+                <div class="post-buttons d-flex align-items-center">
+
+                    <button>
+
+                        <i class="fa-regular fa-thumbs-up"></i>
+
+                        Like
+
+                    </button>
+
+
+                    <button>
+
+                        <i class="fa-regular fa-comment"></i>
+
+                        Comment
+
+                    </button>
+
+
+                    <button>
+
+                        <i class="fa-solid fa-share"></i>
+
+                        Share
+
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- =========================
+                 POST 2
+            ========================== -->
+
+            <article class="card post">
+
+                <div class="post-header d-flex align-items-center">
+
+                    <img
+                        class="post-avatar"
+                        src="Tony Stark.jpg"
+                        alt="Profile">
+
+                    <div class="post-user">
+
+                        <strong>
+                            Iron man
+                        </strong>
+
+                        <div class="post-time">
+
+                            5h ·
+
+                            <i class="fa-solid fa-user-group"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <button class="post-menu">
+
+                        <i class="fa-solid fa-ellipsis"></i>
+
+                    </button>
+
+                </div>
+
+
+                <div class="post-text">
+
+                    Finally finished my new K.A.R.E.N! 🤖
+
+                    <br><br>
+
+                    Months of debugging and way too much
+                    coffee. Really happy with how it turned out.
+
+                </div>
+
+
+                <div class="programming-post">
+
+                    <i class="fa-solid fa-code"></i>
+
+                    <h2>
+                        PROJECT COMPLETE
+                    </h2>
+
+                    <p>
+                        Every hero needs a safety net. Meet yours.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="post-stats d-flex align-items-center justify-content-between">
+
+                    <div class="reaction-box d-flex align-items-center">
+
+                        <span class="reaction like-reaction">
+
+                            <i class="fa-solid fa-thumbs-up"></i>
+
+                        </span>
+
+                        <span class="reaction love-reaction">
+
+                            <i class="fa-solid fa-heart"></i>
+
+                        </span>
+
+                        <span class="reaction-number">
+                            428
+                        </span>
+
+                    </div>
+
+
+                    <span>
+                        52 comments · 8 shares
+                    </span>
+
+                </div>
+
+
+                <div class="post-buttons d-flex align-items-center">
+
+                    <button>
+
+                        <i class="fa-regular fa-thumbs-up"></i>
+
+                        Like
+
+                    </button>
+
+
+                    <button>
+
+                        <i class="fa-regular fa-comment"></i>
+
+                        Comment
+
+                    </button>
+
+
+                    <button>
+
+                        <i class="fa-solid fa-share"></i>
+
+                        Share
+
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- =========================
+                 POST 3
+            ========================== -->
+
+            <article class="card post">
+
+                <div class="post-header d-flex align-items-center">
+
+                    <img
+                        class="post-avatar"
+                        src="https://i.pravatar.cc/100?img=17"
+                        alt="Profile">
+
+                    <div class="post-user">
+
+                        <strong>
+                            Depressed Guy
+                        </strong>
+
+                        <div class="post-time">
+
+                            8h ·
+
+                            <i class="fa-solid fa-earth-americas"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <button class="post-menu">
+
+                        <i class="fa-solid fa-ellipsis"></i>
+
+                    </button>
+
+                </div>
+
+
+                <div class="post-text">
+
+                    Depressed, frustrated, and alone—but at least
+                    the view is aesthetic, right?
+
+                </div>
+
+
+                <img
+                    class="post-image img-fluid"
+                    src="Post-3.jpg"
+                    alt="City view">
+
+
+                <div
+                    class="post-stats d-flex align-items-center justify-content-between">
+
+                    <div class="reaction-box d-flex align-items-center">
+
+                        <span class="reaction like-reaction">
+
+                            <i class="fa-solid fa-thumbs-up"></i>
+
+                        </span>
+
+                        <span class="reaction love-reaction">
+
+                            <i class="fa-solid fa-heart"></i>
+
+                        </span>
+
+                        <span class="reaction-number">
+                            756
+                        </span>
+
+                    </div>
+
+
+                    <span>
+                        64 comments · 12 shares
+                    </span>
+
+                </div>
+
+
+                <div class="post-buttons d-flex align-items-center">
+
+                    <button>
+
+                        <i class="fa-regular fa-thumbs-up"></i>
+
+                        Like
+
+                    </button>
+
+
+                    <button>
+
+                        <i class="fa-regular fa-comment"></i>
+
+                        Comment
+
+                    </button>
+
+
+                    <button>
+
+                        <i class="fa-solid fa-share"></i>
+
+                        Share
+
+                    </button>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- =========================
+             RIGHT SIDEBAR
+        ========================== -->
+
+        <aside class="right-sidebar">
+
+
+            <!-- SPONSORED -->
+
+            <div class="section-heading">
+                Sponsored
+            </div>
+
+
+            <div class="sponsored d-flex align-items-center">
+
+                <div class="ad ad1">
+
+                    <i class="fa-solid fa-laptop-code"></i>
+
+                </div>
+
+                <div>
+
+                    <strong>
+                        Become a Web Developer
+                    </strong>
+
+                    <span>
+                        learncoding.com
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="sponsored d-flex align-items-center">
+
+                <div class="ad ad2">
+
+                    <i class="fa-solid fa-headphones"></i>
+
+                </div>
+
+                <div>
+
+                    <strong>
+                        Premium Headphones
+                    </strong>
+
+                    <span>
+                        techstore.com
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="line"></div>
+
+
+            <!-- BIRTHDAYS -->
+
+            <div class="section-heading">
+                Birthdays
+            </div>
+
+
+            <div class="birthday d-flex align-items-center">
+
+                <i class="fa-solid fa-gift"></i>
+
+                <p>
+
+                    <strong>
+                        Rayyan
+                    </strong>
+
+                    and
+
+                    <strong>
+                        2 others
+                    </strong>
+
+                    have birthdays today.
+
+                </p>
+
+            </div>
+
+
+            <div class="line"></div>
+
+
+            <!-- CONTACTS -->
+
+            <div
+                class="contacts-heading d-flex align-items-center justify-content-between">
+
+                <h3>
+                    Contacts
+                </h3>
+
+                <div>
+
+                    <button>
+
+                        <i class="fa-solid fa-video"></i>
+
+                    </button>
+
+                    <button>
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                    </button>
+
+                    <button>
+
+                        <i class="fa-solid fa-ellipsis"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONTACT 1 -->
+
+            <div class="contact d-flex align-items-center">
+
+                <div class="contact-image">
+
+                    <img src="Khan.jpg">
+
+                    <span class="online"></span>
+
+                </div>
+
+                <strong>
+                    Khan
+                </strong>
+
+            </div>
+
+
+            <!-- CONTACT 2 -->
+
+            <div class="contact d-flex align-items-center">
+
+                <div class="contact-image">
+
+                    <img src="Ronaldo.jpg">
+
+                    <span class="online"></span>
+
+                </div>
+
+                <strong>
+                    Cristiano Ronaldo
+                </strong>
+
+            </div>
+
+
+            <!-- CONTACT 3 -->
+
+            <div class="contact d-flex align-items-center">
+
+                <div class="contact-image">
+
+                    <img src="Jarvis.png">
+
+                    <span class="online"></span>
+
+                </div>
+
+                <strong>
+                    J.A.R.V.I.S
+                </strong>
+
+            </div>
+
+
+            <!-- CONTACT 4 -->
+
+            <div class="contact d-flex align-items-center">
+
+                <div class="contact-image">
+
+                    <img src="https://i.pravatar.cc/80?img=14">
+
+                    <span class="online"></span>
+
+                </div>
+
+                <strong>
+                    Rayyan
+                </strong>
+
+            </div>
+
+
+            <!-- CONTACT 5 -->
+
+            <div class="contact d-flex align-items-center">
+
+                <div class="contact-image">
+
+                    <img src="https://i.pravatar.cc/80?img=11">
+
+                    <span class="online"></span>
+
+                </div>
+
+                <strong>
+                    Choudhary Peter
+                </strong>
+
+            </div>
+
+
+            <!-- CONTACT 6 -->
+
+            <div class="contact d-flex align-items-center">
+
+                <div class="contact-image">
+
+                    <img src="Peterparker.webp">
+
+                    <span class="online"></span>
+
+                </div>
+
+                <strong>
+                    Peter Parker
+                </strong>
+
+            </div>
+
+
+            <!-- CONTACT 7 -->
+
+            <div class="contact d-flex align-items-center">
+
+                <div class="contact-image">
+
+                    <img src="F.R.I.D.A.Y.webp">
+
+                    <span class="online"></span>
+
+                </div>
+
+                <strong>
+                    F.R.I.D.A.Y
+                </strong>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+
+    <!-- Bootstrap 5 JavaScript -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+</body>
+
+</html>
