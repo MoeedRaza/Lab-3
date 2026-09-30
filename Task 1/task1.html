@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <title>BSCS-V-A (Shift-I) Timetable</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap"
+        rel="stylesheet">
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --paper: #ffffff;
+            --ink: #000000;
+            --soft: #5c5c5c;
+            --rule: #c9c9c9;
+            --blue: #1b3fd1;
+            --on-blue: #ffffff;
+
+            box-sizing: border-box;
+
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --paper: #000000;
+                --ink: #ffffff;
+                --soft: #a3a3a3;
+                --rule: #3a3a3a;
+                --blue: #3d5eff;
+                --on-blue: #ffffff;
+            }
+        }
+
+        :root[data-theme="dark"] {
+            --paper: #000000;
+            --ink: #ffffff;
+            --soft: #a3a3a3;
+            --rule: #3a3a3a;
+            --blue: #3d5eff;
+            --on-blue: #ffffff;
+        }
+
+        html {
+            scroll-padding-top: env(safe-area-inset-top, 0px);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: inherit;
+        }
+
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .page {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 36px 24px 40px;
+        }
+
+        .top {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
+            gap: 24px 48px;
+            align-items: end;
+            padding-bottom: 20px;
+            border-bottom: 6px solid var(--ink);
+        }
+
+        h1 {
+            margin: 0;
+            font-weight: 900;
+            font-stretch: 125%;
+            font-size: clamp(48px, 9vw, 120px);
+            line-height: .82;
+            letter-spacing: -0.035em;
+        }
+
+        .sub {
+            margin: 16px 0 0;
+            font-stretch: 100%;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .sub span {
+            color: var(--soft);
+        }
+
+        .hours-wrap {
+            overflow-x: auto;
+        }
+
+        table.hours {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            --bs-table-bg: transparent;
+            --bs-table-color: var(--ink);
+        }
+
+        table.hours th {
+            text-align: left;
+            font-weight: 700;
+            font-size: 12px;
+            padding: 0 8px 6px 0;
+            border-bottom: 2px solid var(--ink);
+            background: transparent;
+            color: var(--ink);
+        }
+
+        table.hours th.num,
+        table.hours td.num {
+            text-align: right;
+            padding-left: 12px;
+            padding-right: 0;
+        }
+
+        table.hours td {
+            padding: 5px 8px 5px 0;
+            border-bottom: 1px solid var(--rule);
+            background: transparent;
+            color: var(--ink);
+        }
+
+        table.hours td.k {
+            font-weight: 800;
+            font-stretch: 112%;
+            width: 52px;
+        }
+
+        table.hours .b {
+            font-weight: 800;
+        }
+
+        table.hours .nil {
+            color: var(--rule);
+        }
+
+        table.hours th.lab-h {
+            color: var(--blue);
+        }
+
+        table.hours tfoot td {
+            border-bottom: none;
+            border-top: 2px solid var(--ink);
+            font-weight: 900;
+            font-size: 15px;
+            padding-top: 7px;
+        }
+
+        .grid-wrap {
+            overflow-x: auto;
+            margin-top: 4px;
+        }
+
+        table.tt {
+            width: 100%;
+            min-width: 1140px;
+            border-collapse: collapse;
+            table-layout: fixed;
+
+            --bs-table-bg: transparent;
+            --bs-table-color: var(--ink);
+        }
+
+        table.tt col.dc {
+            width: 104px;
+        }
+
+        table.tt thead th {
+            text-align: left;
+            font-weight: 400;
+            padding: 12px 10px 10px;
+            border-bottom: 2px solid var(--ink);
+            vertical-align: bottom;
+            background: transparent;
+            color: var(--ink);
+        }
+
+        table.tt thead th .h {
+            display: block;
+            font-weight: 800;
+            font-stretch: 112%;
+            font-size: 18px;
+        }
+
+        table.tt thead th .to {
+            font-size: 11px;
+            color: var(--soft);
+        }
+
+        table.tt tbody tr {
+            border-bottom: 2px solid var(--ink);
+        }
+
+        table.tt tbody th {
+            text-align: left;
+            vertical-align: top;
+            padding: 12px 10px 12px 0;
+            background: transparent;
+            color: var(--ink);
+        }
+
+        table.tt .d {
+            display: block;
+            font-weight: 900;
+            font-stretch: 125%;
+            font-size: 34px;
+            line-height: .9;
+            letter-spacing: -0.02em;
+        }
+
+        table.tt .dl {
+            display: block;
+            font-size: 12px;
+            color: var(--soft);
+            margin-top: 6px;
+        }
+
+        table.tt td {
+            height: 138px;
+            padding: 0;
+            vertical-align: top;
+            border-left: 1px solid var(--rule);
+            background: transparent;
+            color: var(--ink);
+        }
+
+        .cell {
+            height: 100%;
+            padding: 12px 10px 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .code {
+            font-weight: 900;
+            font-stretch: 118%;
+            font-size: 26px;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .name {
+            font-size: 12.5px;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-top: 8px;
+        }
+
+        .who {
+            font-size: 11px;
+            line-height: 1.3;
+            color: var(--soft);
+            margin-top: 4px;
+        }
+
+        .room {
+            margin-top: auto;
+            font-size: 12px;
+            font-weight: 700;
+            padding-top: 6px;
+            border-top: 1px solid var(--rule);
+        }
+
+        table.tt td.lab {
+            background: var(--blue) !important;
+            color: var(--on-blue) !important;
+            border-left-color: var(--blue);
+        }
+
+        td.lab .cell {
+            padding: 14px 16px 12px;
+        }
+
+        td.lab .code {
+            font-size: 44px;
+            font-stretch: 125%;
+        }
+
+        td.lab .code em {
+            font-style: normal;
+            font-weight: 500;
+            font-stretch: 100%;
+            font-size: 13px;
+            letter-spacing: 0;
+            margin-left: 12px;
+            vertical-align: 8px;
+        }
+
+        td.lab .name {
+            font-size: 15px;
+            margin-top: 10px;
+        }
+
+        td.lab .who {
+            color: var(--on-blue);
+            opacity: .8;
+            font-size: 12.5px;
+        }
+
+        td.lab .room {
+            border-top-color: rgba(255, 255, 255, .4);
+            font-size: 13px;
+        }
+
+        table.tt td.free {
+            background: var(--paper);
+        }
+
+        .foot {
+            font-size: 12px;
+            color: var(--soft);
+            margin-top: 12px;
+        }
+
+        .key {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .key i {
+            width: 22px;
+            height: 12px;
+            background: var(--blue);
+            display: inline-block;
+        }
+
+        @media (max-width: 820px) {
+            .top {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid page">
+
+        <!-- Masthead -->
+        <section class="top">
+
+            <div>
+                <h1>
+                    BSCS<br>
+                    V-A
+                </h1>
+
+                <p class="sub">
+                    Weekly timetable, Shift-I<br>
+                    <span>Air University, Islamabad</span>
+                </p>
+            </div>
+
+            <div class="table-responsive hours-wrap">
+
+                <table class="table hours mb-0">
+
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Course</th>
+                            <th class="num">Theory</th>
+                            <th class="num lab-h">Lab</th>
+                            <th class="num">Total</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td class="k">AI</td>
+                            <td>Artificial Intelligence</td>
+                            <td class="num">2</td>
+                            <td class="num">3</td>
+                            <td class="num b">5</td>
+                        </tr>
+
+                        <tr>
+                            <td class="k">OS</td>
+                            <td>Operating Systems</td>
+                            <td class="num">2</td>
+                            <td class="num">3</td>
+                            <td class="num b">5</td>
+                        </tr>
+
+                        <tr>
+                            <td class="k">FSWD</td>
+                            <td>Full Stack Web Development</td>
+                            <td class="num">2</td>
+                            <td class="num">3</td>
+                            <td class="num b">5</td>
+                        </tr>
+
+                        <tr>
+                            <td class="k">DAA</td>
+                            <td>Design and Analysis of Algorithms</td>
+                            <td class="num">3</td>
+                            <td class="num">
+                                <span class="nil">0</span>
+                            </td>
+                            <td class="num b">3</td>
+                        </tr>
+
+                        <tr>
+                            <td class="k">LA</td>
+                            <td>Linear Algebra</td>
+                            <td class="num">3</td>
+                            <td class="num">
+                                <span class="nil">0</span>
+                            </td>
+                            <td class="num b">3</td>
+                        </tr>
+
+                        <tr>
+                            <td class="k">MGT</td>
+                            <td>Introduction to Management</td>
+                            <td class="num">2</td>
+                            <td class="num">
+                                <span class="nil">0</span>
+                            </td>
+                            <td class="num b">2</td>
+                        </tr>
+
+                        <tr>
+                            <td class="k">ADV</td>
+                            <td>Advisory Class</td>
+                            <td class="num">1</td>
+                            <td class="num">
+                                <span class="nil">0</span>
+                            </td>
+                            <td class="num b">1</td>
+                        </tr>
+
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td>Hours per week</td>
+                            <td class="num">15</td>
+                            <td class="num">9</td>
+                            <td class="num">24</td>
+                        </tr>
+                    </tfoot>
+
+                </table>
+            </div>
+
+        </section>
+
+        <div class="table-responsive grid-wrap">
+
+            <table class="table tt mb-0">
+
+                <colgroup>
+                    <col class="dc">
+                    <col span="9">
+                </colgroup>
+
+                <thead>
+
+                    <tr>
+
+                        <th></th>
+
+                        <th scope="col">
+                            <span class="h">08:00</span>
+                            <span class="to">to 09:00</span>
+                        </th>
+
+                        <th scope="col">
+                            <span class="h">09:00</span>
+                            <span class="to">to 10:00</span>
+                        </th>
+
+                        <th scope="col">
+                            <span class="h">10:00</span>
+                            <span class="to">to 11:00</span>
+                        </th>
+
+                        <th scope="col">
+                            <span class="h">11:00</span>
+                            <span class="to">to 12:00</span>
+                        </th>
+
+                        <th scope="col">
+                            <span class="h">12:00</span>
+                            <span class="to">to 13:00</span>
+                        </th>
+
+                        <th scope="col">
+                            <span class="h">13:00</span>
+                            <span class="to">to 14:00</span>
+                        </th>
+
+                        <th scope="col">
+                            <span class="h">14:00</span>
+                            <span class="to">to 15:00</span>
+                        </th>
+
+                        <th scope="col">
+                            <span class="h">15:00</span>
+                            <span class="to">to 16:00</span>
+                        </th>
+
+                        <th scope="col">
+                            <span class="h">16:00</span>
+                            <span class="to">to 17:00</span>
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+
+                        <th scope="row">
+                            <span class="d">Mon</span>
+                            <span class="dl">Monday</span>
+                        </th>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">AI</span>
+                                <span class="name">Artificial Intelligence</span>
+                                <span class="who">Ms Maryam Wardah</span>
+                                <span class="room mt-auto">C-205</span>
+                            </div>
+                        </td>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">OS</span>
+                                <span class="name">Operating Systems</span>
+                                <span class="who">Ms Warda Aslam, Ms Eeman Fatima</span>
+                                <span class="room mt-auto">Lecture Hall 01</span>
+                            </div>
+                        </td>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">DAA</span>
+                                <span class="name">Design and Analysis of Algorithms</span>
+                                <span class="who">Mr Muhammad Junaid Nazar</span>
+                                <span class="room mt-auto">C-202</span>
+                            </div>
+                        </td>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">LA</span>
+                                <span class="name">Linear Algebra</span>
+                                <span class="who">Dr Waqas Sarwar Abbasi</span>
+                                <span class="room mt-auto">C-301</span>
+                            </div>
+                        </td>
+
+                        <td class="free"></td>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">MGT</span>
+                                <span class="name">Introduction to Management</span>
+                                <span class="who">Ms Ayesha Munir (AUSOM)</span>
+                                <span class="room mt-auto">C-303</span>
+                            </div>
+                        </td>
+
+                        <td class="free"></td>
+                        <td class="free"></td>
+                        <td class="free"></td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th scope="row">
+                            <span class="d">Tue</span>
+                            <span class="dl">Tuesday</span>
+                        </th>
+
+                        <td class="lab" colspan="3">
+
+                            <div class="cell d-flex flex-column">
+
+                                <span class="code">
+                                    AI
+                                    <em>Lab, 3 hours</em>
+                                </span>
+
+                                <span class="name">
+                                    Artificial Intelligence Lab
+                                </span>
+
+                                <span class="who">
+                                    Ms Maryam Wardah
+                                </span>
+
+                                <span class="room mt-auto">
+                                    Lab 5, A Block
+                                </span>
+
+                            </div>
+
+                        </td>
+
+                        <td class="free"></td>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">LA</span>
+                                <span class="name">Linear Algebra</span>
+                                <span class="who">Dr Waqas Sarwar Abbasi</span>
+                                <span class="room mt-auto">C-203</span>
+                            </div>
+                        </td>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">DAA</span>
+                                <span class="name">Design and Analysis of Algorithms</span>
+                                <span class="who">Mr Muhammad Junaid Nazar</span>
+                                <span class="room mt-auto">C-302</span>
+                            </div>
+                        </td>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">OS</span>
+                                <span class="name">Operating Systems</span>
+                                <span class="who">Ms Warda Aslam, Ms Eeman Fatima</span>
+                                <span class="room mt-auto">Lecture Hall 01</span>
+                            </div>
+                        </td>
+
+                        <td class="free"></td>
+                        <td class="free"></td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th scope="row">
+                            <span class="d">Wed</span>
+                            <span class="dl">Wednesday</span>
+                        </th>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">DAA</span>
+                                <span class="name">Design and Analysis of Algorithms</span>
+                                <span class="who">Mr Muhammad Junaid Nazar</span>
+                                <span class="room mt-auto">C-302</span>
+                            </div>
+                        </td>
+
+                        <td class="free"></td>
+                        <td class="free"></td>
+
+                        <td class="lab" colspan="3">
+
+                            <div class="cell d-flex flex-column">
+
+                                <span class="code">
+                                    OS
+                                    <em>Lab, 3 hours</em>
+                                </span>
+
+                                <span class="name">
+                                    Operating Systems Lab
+                                </span>
+
+                                <span class="who">
+                                    Ms Warda Aslam
+                                </span>
+
+                                <span class="room mt-auto">
+                                    Lab 13, C Block, 3rd floor
+                                </span>
+
+                            </div>
+
+                        </td>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">FSWD</span>
+                                <span class="name">Full Stack Web Development</span>
+                                <span class="who">
+                                    Mr Hafiz Obiad Ullah Khan,
+                                    Mr Asim Ali Fayyaz
+                                </span>
+                                <span class="room mt-auto">
+                                    Lecture Hall 01
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="free"></td>
+                        <td class="free"></td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th scope="row">
+                            <span class="d">Thu</span>
+                            <span class="dl">Thursday</span>
+                        </th>
+
+                        <td class="free"></td>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">AI</span>
+                                <span class="name">Artificial Intelligence</span>
+                                <span class="who">Ms Maryam Wardah</span>
+                                <span class="room mt-auto">C-202</span>
+                            </div>
+                        </td>
+
+                        <td class="free"></td>
+
+                        <td class="lab" colspan="3">
+
+                            <div class="cell d-flex flex-column">
+
+                                <span class="code">
+                                    FSWD
+                                    <em>Lab, 3 hours</em>
+                                </span>
+
+                                <span class="name">
+                                    Full Stack Web Development Lab
+                                </span>
+
+                                <span class="who">
+                                    Mr Hafiz Obiad Ullah Khan
+                                </span>
+
+                                <span class="room mt-auto">
+                                    Lab 5, A Block
+                                </span>
+
+                            </div>
+
+                        </td>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">FSWD</span>
+                                <span class="name">
+                                    Full Stack Web Development
+                                </span>
+                                <span class="who">
+                                    Mr Hafiz Obiad Ullah Khan,
+                                    Mr Asim Ali Fayyaz
+                                </span>
+                                <span class="room mt-auto">
+                                    Lecture Hall 01
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="free"></td>
+                        <td class="free"></td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th scope="row">
+                            <span class="d">Fri</span>
+                            <span class="dl">Friday</span>
+                        </th>
+
+                        <td class="free"></td>
+                        <td class="free"></td>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">MGT</span>
+                                <span class="name">
+                                    Introduction to Management
+                                </span>
+                                <span class="who">
+                                    Ms Ayesha Munir (AUSOM)
+                                </span>
+                                <span class="room mt-auto">
+                                    C-302
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">LA</span>
+                                <span class="name">
+                                    Linear Algebra
+                                </span>
+                                <span class="who">
+                                    Dr Waqas Sarwar Abbasi
+                                </span>
+                                <span class="room mt-auto">
+                                    C-301
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="cls">
+                            <div class="cell d-flex flex-column">
+                                <span class="code">ADV</span>
+                                <span class="name">
+                                    Advisory Class
+                                </span>
+                                <span class="who">
+                                    Ms Eeman Fatima
+                                </span>
+                                <span class="room mt-auto">
+                                    C-202
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="free"></td>
+                        <td class="free"></td>
+                        <td class="free"></td>
+                        <td class="free"></td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div
+            class="foot d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <span class="key">
+                <i></i>
+                Blue blocks are 3-hour labs. All rooms are Shift-I.
+            </span>
+
+            <span>
+                Timetable generated 03/09/2026
+            </span>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
